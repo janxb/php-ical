@@ -32,7 +32,7 @@ $year = (isset($_GET['y']) ? intval($_GET['y']) : date('Y'));
             $daysOfThisMonth = (int)(new DateTime($year . '-' . $month . '-01'))->format('t');
             $day = -$firstDayOfThisMonth;
             for ($i = 0;
-                 $i <= 40;
+                 $i <= 42;
                  $i++) {
 
                 $day++;
