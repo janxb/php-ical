@@ -103,6 +103,8 @@ class Event
 
     public function getLocation()
     {
+        $this->event->location = str_replace('\\n', ', ', $this->event->location);
+        $this->event->location = str_replace('\\r', '', $this->event->location);
         return str_replace('\\', '', $this->event->location);
     }
 }
