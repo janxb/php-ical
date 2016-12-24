@@ -1,0 +1,37 @@
+{
+  "name": "php-ical",
+  "license": "MIT",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "incenteev/composer-parameter-handler": "^2.1",
+    "php": "^7.0",
+    "symfony/yaml": "^3.2",
+    "symfony/var-dumper": "^3.2",
+    "johngrogg/ics-parser": "^2.0",
+    "symfony/cache": "^3.2"
+  },
+  "require-dev": {},
+  "scripts": {
+    "post-install-cmd": [
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+    ],
+    "post-update-cmd": [
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+    ]
+  },
+  "extra": {
+    "incenteev-parameters": {
+      "file": "config/config.yml"
+    }
+  }
+}

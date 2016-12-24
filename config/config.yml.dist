@@ -1,0 +1,9 @@
+parameters:
+  calendars.urls: []
+  calendars.colors:
+    - green
+    - gray
+    - blue
+    - red
+  cache.directory: "../.cache"
+  cache.lifetime: 600
