@@ -2,7 +2,8 @@
 <?php
 require_once "../vendor/autoload.php";
 
-$app = new \janxb\PHPical\App('../config/bak.config.yml');
+$app = new \janxb\PHPical\App('../config/config.yml');
+
 $month = (isset($_GET['m']) ? intval($_GET['m']) : date('m'));
 $year = (isset($_GET['y']) ? intval($_GET['y']) : date('Y'));
 
