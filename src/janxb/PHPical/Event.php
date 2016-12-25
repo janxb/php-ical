@@ -26,11 +26,14 @@ class Event
     {
         $this->color = $color;
         $this->event = $event;
-
         /** @noinspection PhpUndefinedFieldInspection */
         $this->dateStart = new DateTime($this->event->dtstart_tz);
         /** @noinspection PhpUndefinedFieldInspection */
-        $this->dateEnd = new DateTime($this->event->dtend_tz);
+        if (isset($this->event->dtend_tz))
+            /** @noinspection PhpUndefinedFieldInspection */
+            $this->dateEnd = new DateTime($this->event->dtend_tz);
+        else
+            $this->dateEnd = $this->dateStart;
     }
 
     /**
@@ -54,8 +57,7 @@ class Event
     public function isFullDayEvent()
     {
         return ($this->getStartTime() == '00:00' &&
-            $this->getStartTime() == $this->getEndTime() &&
-            $this->getFullDayCount() == 1
+            $this->getStartTime() == $this->getEndTime()
         );
     }
 
