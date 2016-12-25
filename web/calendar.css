@@ -53,6 +53,10 @@ h3 {
     color: gray;
 }
 
+.day.current {
+    background: #f4d8d7;
+}
+
 .day .date {
     display: block;
 }

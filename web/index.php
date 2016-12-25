@@ -6,12 +6,13 @@ $app = new \janxb\PHPical\App('../config/config.yml');
 
 $month = (isset($_GET['m']) ? intval($_GET['m']) : date('m'));
 $year = (isset($_GET['y']) ? intval($_GET['y']) : date('Y'));
+$currentDay = date('d');
 
 ?>
 <html>
     <head>
         <title>Calendar</title>
-        <link rel="stylesheet" href="calendar.css?_v=1"/>
+        <link rel="stylesheet" href="calendar.css?_v=2"/>
     </head>
     <body>
         <h3>
@@ -48,8 +49,9 @@ $year = (isset($_GET['y']) ? intval($_GET['y']) : date('Y'));
                     $printDay = $day;
 
                 $dayDisabled = ($printDay != $day) ? 'disabled' : '';
+                $dayCurrent = ($day == $currentDay) ? 'current' : '';
                 ?>
-                <div class="column day <?= $dayDisabled ?>">
+                <div class="column day <?= $dayDisabled ?> <?= $dayCurrent ?>">
                     <span class="date"><?= $printDay ?></span>
                     <?php
                     $events = $app->getEvents($year, $month, $day);
