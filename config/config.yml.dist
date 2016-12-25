@@ -1,4 +1,5 @@
 parameters:
+  calendar.showlist: true
   calendar.password:
   calendar.urls: []
   calendar.colors:

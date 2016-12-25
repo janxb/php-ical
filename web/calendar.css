@@ -15,12 +15,12 @@ body {
     background: #eee;
     box-shadow: 0 0 3px #ddd;
     border-radius: 3px;
-    cursor: pointer;
     padding: 5px;
     z-index: 10;
     overflow: hidden;
     max-width: 30%;
     text-align: center;
+    cursor: default;
 }
 
 .calendarlegend .title {
@@ -29,7 +29,6 @@ body {
 
 .calendarlegend .calendars {
     background: inherit;
-    cursor: default;
     padding: 5px;
     overflow: hidden;
 }

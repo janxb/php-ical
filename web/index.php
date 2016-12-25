@@ -12,7 +12,7 @@ $currentDay = date('d');
 <html>
     <head>
         <title>Calendar</title>
-        <link rel="stylesheet" href="calendar.css?_v=2"/>
+        <link rel="stylesheet" href="calendar.css?_v=4"/>
     </head>
     <body>
         <h3>
@@ -22,14 +22,16 @@ $currentDay = date('d');
             <a href="?<?= \janxb\PHPical\DateCalculator::nextMonth($year, $month) ?>">&rArr;</a>
         </h3>
 
-        <div class="calendarlegend">
-            <span class="title">Calendars</span>
-            <div class="calendars">
-                <?php foreach ($app->getCalendars() as $calendar) { ?>
-                    <span style="color: <?= $calendar->getColor() ?>"><?= $calendar->getTitle() ?></span>
-                <?php } ?>
+        <?php if ($app->getConfigParameter('calendar.showlist') === true) { ?>
+            <div class="calendarlegend">
+                <span class="title">Calendars</span>
+                <div class="calendars">
+                    <?php foreach ($app->getCalendars() as $calendar) { ?>
+                        <span style="color: <?= $calendar->getColor() ?>"><?= $calendar->getTitle() ?></span>
+                    <?php } ?>
+                </div>
             </div>
-        </div>
+        <?php } ?>
 
         <div class="calendar">
             <?php for ($i = 1; $i <= 7; $i++) { ?>

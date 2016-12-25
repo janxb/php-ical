@@ -32,6 +32,11 @@ class App
         $this->parseCalendars();
     }
 
+    public function getConfigParameter($parameter)
+    {
+        return $this->config[$parameter];
+    }
+
     private function getCalendarsIdentifier()
     {
         return sha1(implode(';', array_merge(
