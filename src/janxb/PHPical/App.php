@@ -23,6 +23,10 @@ class App
     public function __construct($configPath)
     {
         $this->parseConfig($configPath);
+        if (!empty($this->config['calendar.password'])) {
+            new PasswordProtector($this->config['calendar.password']);
+        }
+
         $this->cache = new FilesystemAdapter(null, $this->config['cache.lifetime'], $this->config['cache.directory']);
 
         $this->parseCalendars();
@@ -55,7 +59,7 @@ class App
 
         foreach ($this->calendars as $key => $calendar) {
             foreach ($calendar->eventsFromRange($year . $month . $minDay, $year . $month . $maxDay) as $event) {
-                $color = $this->config['calendars.colors'][$key];
+                $color = $this->config['calendar.colors'][$key];
                 $event = new Event($color, $event);
                 if (!$event->isFullDayEventFromYesterday($year, $month, $day))
                     $events[] = $event;
@@ -71,7 +75,10 @@ class App
 
     private function parseCalendars()
     {
-        foreach ($this->config['calendars.urls'] as $key => $calendarPath) {
+        if (!is_array($this->config['calendar.urls']))
+            return;
+
+        foreach ($this->config['calendar.urls'] as $key => $calendarPath) {
             $cacheCalendar = $this->cache->getItem(sha1($calendarPath));
             if ($cacheCalendar->isHit())
                 $calendar = $cacheCalendar->get();

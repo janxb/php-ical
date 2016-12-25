@@ -18,7 +18,8 @@
     "symfony/yaml": "^3.2",
     "symfony/var-dumper": "^3.2",
     "johngrogg/ics-parser": "^2.0",
-    "symfony/cache": "^3.2"
+    "symfony/cache": "^3.2",
+    "symfony/http-foundation": "^3.2"
   },
   "require-dev": {},
   "scripts": {

@@ -2,17 +2,24 @@ body {
     font-family: "Verdana", sans-serif;
 }
 
+.loginform {
+    float: left;
+    position: fixed;
+}
+
 h3 {
     padding: 0;
     margin: 0;
     width: 100%;
     text-align: center;
+    font-size: 1em;
+    position: fixed;
 }
 
 .calendar {
     right: 10px;
     left: 10px;
-    top: 50px;
+    top: 4em;
     bottom: 10px;
     position: fixed;
     font-size: 0.8em;
@@ -20,7 +27,7 @@ h3 {
 
 .column {
     box-sizing: border-box;
-    width: 14.36%;
+    width: 14.3%;
     margin-right: -1px;
     margin-bottom: -1px;
     border: 1px solid black;
@@ -38,6 +45,8 @@ h3 {
 
 .day {
     height: 16.2%;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .day.disabled {
