@@ -46,7 +46,12 @@ class Event
 
     public function getTitle()
     {
-        return $this->event->summary;
+        return stripslashes($this->event->summary);
+    }
+
+    public function getLocation()
+    {
+        return stripslashes($this->event->location);
     }
 
     public function getRawTimestamp()
@@ -101,12 +106,5 @@ class Event
     public function getEndTime()
     {
         return $this->dateEnd->format('H:i');
-    }
-
-    public function getLocation()
-    {
-        $this->event->location = str_replace('\\n', ', ', $this->event->location);
-        $this->event->location = str_replace('\\r', '', $this->event->location);
-        return str_replace('\\', '', $this->event->location);
     }
 }
