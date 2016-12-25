@@ -11,3 +11,5 @@ PHP application for viewing local and remote *.ics*-files.
 * clone this repository to your application destination
 * execute *composer install* to download dependencies and configure settings
 * set your domain document root to */web*
+
+![image](https://cloud.githubusercontent.com/assets/1172106/21470735/368fe72c-ca96-11e6-9d73-65b2a8b40715.png)
