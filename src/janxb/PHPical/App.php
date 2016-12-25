@@ -32,6 +32,35 @@ class App
         $this->parseCalendars();
     }
 
+    private function getCalendarsIdentifier()
+    {
+        return sha1(implode(';', array_merge(
+            $this->config['calendar.urls'],
+            $this->config['calendar.colors']
+        )));
+    }
+
+    /**
+     * @return Calendar[]
+     */
+    public function getCalendars()
+    {
+        $result = [];
+        if (!is_array($this->calendars))
+            return $result;
+
+        foreach ($this->calendars as $key => $calendar) {
+            $calendarName = $calendar->calendarName();
+            $calendarUrl = $this->config['calendar.urls'][$key];
+            $calendarUrlExploded = explode('/', $calendarUrl);
+            $calendarFileName = end($calendarUrlExploded);
+
+            $calendarTitle = (!empty($calendarName)) ? $calendarName : $calendarFileName;
+            $result[] = new Calendar($calendarTitle, $this->config['calendar.colors'][$key]);
+        }
+        return $result;
+    }
+
     /**
      * @param int $year
      * @param int $month
@@ -40,6 +69,10 @@ class App
      */
     public function getEvents($year, $month, $day = null)
     {
+        $cacheEvent = $this->cache->getItem($this->getCalendarsIdentifier() . $year . $month . $day);
+        if ($cacheEvent->isHit())
+            return $cacheEvent->get();
+
         $events = [];
         $daysOfThisMonth = (int)(new DateTime($year . '-' . $month . '-01'))->format('t');
 
@@ -70,6 +103,9 @@ class App
             return $a->getRawTimestamp() - $b->getRawTimestamp();
         });
 
+        $cacheEvent->set($events);
+        $this->cache->save($cacheEvent);
+
         return $events;
     }
 
@@ -79,7 +115,7 @@ class App
             return;
 
         foreach ($this->config['calendar.urls'] as $key => $calendarPath) {
-            $cacheCalendar = $this->cache->getItem(sha1($calendarPath));
+            $cacheCalendar = $this->cache->getItem('cal-' . sha1($calendarPath));
             if ($cacheCalendar->isHit())
                 $calendar = $cacheCalendar->get();
             else {

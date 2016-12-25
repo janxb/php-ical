@@ -22,6 +22,15 @@ $currentDay = date('d');
             <a href="?<?= \janxb\PHPical\DateCalculator::nextMonth($year, $month) ?>">&rArr;</a>
         </h3>
 
+        <div class="calendarlegend">
+            <span class="title">Calendars</span>
+            <div class="calendars">
+                <?php foreach ($app->getCalendars() as $calendar) { ?>
+                    <span style="color: <?= $calendar->getColor() ?>"><?= $calendar->getTitle() ?></span>
+                <?php } ?>
+            </div>
+        </div>
+
         <div class="calendar">
             <?php for ($i = 1; $i <= 7; $i++) { ?>
                 <div class="column dayname"><?= date("l", mktime(0, 0, 0, 8, $i, 2011)) ?></div>

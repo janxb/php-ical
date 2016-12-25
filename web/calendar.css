@@ -7,6 +7,42 @@ body {
     position: fixed;
 }
 
+.calendarlegend {
+    position: fixed;
+    right: 20px;
+    height: 20px;
+    top: 10px;
+    background: #eee;
+    box-shadow: 0 0 3px #ddd;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 10;
+    overflow: hidden;
+    max-width: 30%;
+    text-align: center;
+}
+
+.calendarlegend .title {
+    text-decoration: underline;
+}
+
+.calendarlegend .calendars {
+    background: inherit;
+    cursor: default;
+    padding: 5px;
+    overflow: hidden;
+}
+
+.calendarlegend .calendars span {
+    display: block;
+    margin: 5px;
+}
+
+.calendarlegend:hover {
+    overflow: visible;
+}
+
 h3 {
     padding: 0;
     margin: 0;
