@@ -11,7 +11,7 @@ $year = (isset($_GET['y']) ? intval($_GET['y']) : date('Y'));
 <html>
     <head>
         <title>Calendar</title>
-        <link rel="stylesheet" href="calendar.css"/>
+        <link rel="stylesheet" href="calendar.css?_v=1"/>
     </head>
     <body>
         <h3>
