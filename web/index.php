@@ -7,12 +7,13 @@ $app = new \janxb\PHPical\App('../config/config.yml');
 $month = (isset($_GET['m']) ? intval($_GET['m']) : date('m'));
 $year = (isset($_GET['y']) ? intval($_GET['y']) : date('Y'));
 $currentDay = date('d');
+$currentMonth = date('m');
 
 ?>
 <html>
     <head>
         <title>Calendar</title>
-        <link rel="stylesheet" href="calendar.css?_v=4"/>
+        <link rel="stylesheet" href="calendar.css?_v=<?= md5_file('calendar.css') ?>"/>
     </head>
     <body>
         <h3>
@@ -60,7 +61,7 @@ $currentDay = date('d');
                     $printDay = $day;
 
                 $dayDisabled = ($printDay != $day) ? 'disabled' : '';
-                $dayCurrent = ($day == $currentDay) ? 'current' : '';
+                $dayCurrent = ($day == $currentDay && $month == $currentMonth) ? 'current' : '';
                 ?>
                 <div class="column day <?= $dayDisabled ?> <?= $dayCurrent ?>">
                     <span class="date"><?= $printDay ?></span>
