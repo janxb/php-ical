@@ -14,13 +14,18 @@ use ICal\EventObject;
 
 class Event
 {
-    /** @var  string */
-    private $color;
     /** @var EventObject */
     private $event;
 
     private $dateStart;
     private $dateEnd;
+
+    /** @var  string */
+    private $title;
+    /** @var  string */
+    private $location;
+    /** @var  string */
+    private $color;
 
     public function __construct($color, EventObject $event)
     {
@@ -34,6 +39,12 @@ class Event
             $this->dateEnd = new DateTime($this->event->dtend_tz);
         else
             $this->dateEnd = $this->dateStart;
+
+        $this->title = str_replace('\n', ', ', $this->event->summary);
+        $this->title = stripslashes($this->title);
+
+        $this->location = str_replace('\n', ', ', $this->event->location);
+        $this->location = stripslashes($this->location);
     }
 
     /**
@@ -46,12 +57,12 @@ class Event
 
     public function getTitle()
     {
-        return stripslashes($this->event->summary);
+        return $this->title;
     }
 
     public function getLocation()
     {
-        return stripslashes($this->event->location);
+        return $this->location;
     }
 
     public function getRawTimestamp()
