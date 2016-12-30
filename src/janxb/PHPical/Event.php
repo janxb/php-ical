@@ -87,6 +87,11 @@ class Event
         return ($this->getFullDayCount() >= 1 && !$this->isFullDayEvent());
     }
 
+    public function isEventUntilEndOfDay()
+    {
+        return ($this->getFullDayCount() == 0 && $this->getEndTime() == '00:00');
+    }
+
     public function isFullDayEventFromYesterday($year, $month, $day)
     {
         $dateString = $year . str_pad($month, 2, '0', STR_PAD_LEFT) . str_pad($day, 2, '0', STR_PAD_LEFT);
@@ -103,7 +108,7 @@ class Event
         if ($this->dateStart->format('Ymd') == $dateString)
             $result .= $this->getStartTime();
         $result .= '-';
-        if ($this->dateEnd->format('Ymd') == $dateString)
+        if ($this->dateEnd->format('Ymd') == $dateString || $this->isEventUntilEndOfDay())
             $result .= $this->getEndTime();
 
         return $result;
