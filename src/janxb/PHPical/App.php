@@ -23,8 +23,8 @@ class App
     public function __construct($configPath)
     {
         $this->parseConfig($configPath);
-        if (!empty($this->config['calendar.password'])) {
-            new PasswordProtector($this->config['calendar.password']);
+        if (!empty($this->config['calendar.passwords'])) {
+            new PasswordProtector($this->config['calendar.passwords']);
         }
 
         $this->cache = new FilesystemAdapter(null, $this->config['cache.lifetime'], $this->config['cache.directory']);

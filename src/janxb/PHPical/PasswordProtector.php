@@ -14,8 +14,11 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class PasswordProtector
 {
-    public function __construct($password)
+    public function __construct($passwords)
     {
+        if (!is_array($passwords))
+            $passwords = [$passwords];
+
         $request = Request::createFromGlobals();
         $session = new Session();
         $session->start();
@@ -27,12 +30,12 @@ class PasswordProtector
             header('Location: .');
         }
 
-        if ($request->get('password') == $password) {
-            $session->set('password', $password);
+        if (in_array($request->get('password'), $passwords)) {
+            $session->set('password', $request->get('password'));
             header('Location: .');
         }
 
-        if ($session->get('password') == $password) {
+        if (in_array($session->get('password'), $passwords)) {
             $html = <<<'EOT'
             <form method="post" class="loginform">
                 <input type="hidden" name="logout" value="true">

@@ -1,6 +1,6 @@
 parameters:
   calendar.showlist: true
-  calendar.password:
+  calendar.passwords: []
   calendar.urls: []
   calendar.colors:
     - green
