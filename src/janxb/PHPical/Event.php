@@ -72,7 +72,7 @@ class Event
 
     public function isFullDayEvent()
     {
-        return ($this->getStartTime() == '00:00' &&
+        return ($this->getStartTime() == '01:00' &&
             $this->getStartTime() == $this->getEndTime()
         );
     }
