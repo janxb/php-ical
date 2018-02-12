@@ -10,7 +10,7 @@ namespace janxb\PHPical;
 
 
 use DateTime;
-use ICal\EventObject;
+use ICal\Event as IcalEvent;
 
 class Event
 {
@@ -27,7 +27,7 @@ class Event
     /** @var  string */
     private $color;
 
-    public function __construct($color, EventObject $event)
+    public function __construct($color, IcalEvent $event)
     {
         $this->color = $color;
         $this->event = $event;
