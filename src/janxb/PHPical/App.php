@@ -27,7 +27,7 @@ class App
             new PasswordProtector($this->config['calendar.passwords']);
         }
 
-        $this->cache = new FilesystemAdapter(null, $this->config['cache.lifetime'], $this->config['cache.directory']);
+        $this->cache = new FilesystemAdapter('janxb_php-ical', $this->config['cache.lifetime'], $this->config['cache.directory']);
 
         $this->parseCalendars();
     }
@@ -71,6 +71,7 @@ class App
      * @param int $month
      * @param null|int $day
      * @return Event[]
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getEvents($year, $month, $day = null)
     {
