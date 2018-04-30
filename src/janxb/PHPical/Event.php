@@ -14,7 +14,7 @@ use ICal\Event as IcalEvent;
 
 class Event
 {
-    /** @var EventObject */
+    /** @var IcalEvent */
     private $event;
 
     private $dateStart;
@@ -72,7 +72,7 @@ class Event
 
     public function isFullDayEvent()
     {
-        return ($this->getStartTime() == '01:00' &&
+        return ($this->getStartTime() == $this->getTimezoneOffset() &&
             $this->getStartTime() == $this->getEndTime()
         );
     }
@@ -122,5 +122,11 @@ class Event
     public function getEndTime()
     {
         return $this->dateEnd->format('H:i');
+    }
+
+    private function getTimezoneOffset()
+    {
+        $offsetHours = timezone_offset_get(timezone_open(date_default_timezone_get()), new DateTime()) / 3600;
+        return str_pad($offsetHours, 2, '0', STR_PAD_LEFT) . ':00';
     }
 }
