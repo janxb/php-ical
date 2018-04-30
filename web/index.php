@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 require_once "../vendor/autoload.php";
 
@@ -10,6 +9,7 @@ $currentDay = date('d');
 $currentMonth = date('m');
 
 ?>
+<!DOCTYPE html>
 <html>
     <head>
         <title>Calendar</title>
