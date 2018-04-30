@@ -3,7 +3,7 @@ require_once "../vendor/autoload.php";
 
 $app = new \janxb\PHPical\App('../config/config.yml');
 
-$month = (isset($_GET['m']) ? intval($_GET['m']) : date('m'));
+$month = (isset($_GET['m']) ? intval($_GET['m']) : date('n'));
 $year = (isset($_GET['y']) ? intval($_GET['y']) : date('Y'));
 $currentDay = date('d');
 $currentMonth = date('m');
