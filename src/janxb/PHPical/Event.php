@@ -26,10 +26,13 @@ class Event
     private $location;
     /** @var  string */
     private $color;
+    /** @var  string */
+    private $timezone;
 
-    public function __construct($color, IcalEvent $event)
+    public function __construct(string $color, IcalEvent $event, string $timezone)
     {
         $this->color = $color;
+        $this->timezone = $timezone;
         $this->event = $event;
         /** @noinspection PhpUndefinedFieldInspection */
         $this->dateStart = new DateTime($this->event->dtstart_tz);
@@ -45,6 +48,14 @@ class Event
 
         $this->location = str_replace('\n', ', ', $this->event->location);
         $this->location = stripslashes($this->location);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTimezone(): string
+    {
+        return $this->timezone;
     }
 
     /**
@@ -126,7 +137,7 @@ class Event
 
     private function getTimezoneOffset()
     {
-        $offsetHours = timezone_offset_get(timezone_open(date_default_timezone_get()), new DateTime()) / 3600;
+        $offsetHours = timezone_offset_get(timezone_open($this->getTimezone()), new DateTime()) / 3600;
         return str_pad($offsetHours, 2, '0', STR_PAD_LEFT) . ':00';
     }
 }

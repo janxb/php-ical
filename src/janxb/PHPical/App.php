@@ -99,7 +99,7 @@ class App
         foreach ($this->calendars as $key => $calendar) {
             foreach ($calendar->eventsFromRange($year . $month . $minDay, $year . $month . $maxDay) as $event) {
                 $color = $this->config['calendar.colors'][$key];
-                $event = new Event($color, $event);
+                $event = new Event($color, $event, $calendar->calendarTimeZone());
                 if (!$event->isFullDayEventFromYesterday($year, $month, $day))
                     $events[] = $event;
             }
