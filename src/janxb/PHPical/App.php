@@ -118,7 +118,7 @@ class App
     private function parseCalendars()
     {
         if (!is_array($this->config['calendar.urls']))
-            return;
+            $this->config['calendar.urls'] = array($this->config['calendar.urls']);
 
         foreach ($this->config['calendar.urls'] as $key => $calendarPath) {
             $cacheCalendar = $this->cache->getItem('cal-' . sha1($calendarPath));
