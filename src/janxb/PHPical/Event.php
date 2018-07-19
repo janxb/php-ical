@@ -28,12 +28,15 @@ class Event
     private $color;
     /** @var  string */
     private $timezone;
+    /** @var  string */
+    private $uuid;
 
     public function __construct(string $color, IcalEvent $event, string $timezone)
     {
         $this->color = $color;
         $this->timezone = $timezone;
         $this->event = $event;
+        $this->uuid = uniqid();
         /** @noinspection PhpUndefinedFieldInspection */
         $this->dateStart = new DateTime($this->event->dtstart_tz);
         /** @noinspection PhpUndefinedFieldInspection */
@@ -48,6 +51,14 @@ class Event
 
         $this->location = str_replace('\n', ', ', $this->event->location);
         $this->location = stripslashes($this->location);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     /**

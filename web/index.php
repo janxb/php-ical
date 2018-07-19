@@ -14,6 +14,8 @@ $currentMonth = date('m');
     <head>
         <title>Calendar</title>
         <link rel="stylesheet" href="calendar.css?_v=<?= md5_file('calendar.css') ?>"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.6/dist/css/tooltipster.bundle.min.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.6/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css""/>
     </head>
     <body>
         <h3>
@@ -24,11 +26,11 @@ $currentMonth = date('m');
         </h3>
 
         <?php if ($app->getConfigParameter('calendar.showlist') === true) { ?>
-            <div class="calendarlegend">
+            <div id="calendarlegend" data-tooltip-content="#calendars">
                 <span class="title">Calendars</span>
-                <div class="calendars">
+                <div id="calendars">
                     <?php foreach ($app->getCalendars() as $calendar) { ?>
-                        <span style="color: <?= $calendar->getColor() ?>"><?= $calendar->getTitle() ?></span>
+                        <span style="color: <?= $calendar->getColor() ?>"><b><?= $calendar->getTitle() ?></b></span><br>
                     <?php } ?>
                 </div>
             </div>
@@ -71,13 +73,29 @@ $currentMonth = date('m');
                     foreach ($events as $event) { ?>
                         <div class="event"
                             <?= \janxb\PHPical\EventStyleGenerator::generate($event) ?>
-                             title="<?= $event->getTitle() ?> | <?= $event->getLocation() ?>">
+                             data-tooltip-content="#tooltip_<?= $event->getUuid() ?>"
+                        >
                             <b><?= $event->getDuration($year, $month, $day) ?></b>
                             <?= $event->getTitle() ?>
+
+	                        <div class="tooltip" id="tooltip_<?= $event->getUuid() ?>">
+		                        <?= $event->getTitle()?>
+                                <?= (!empty($event->getLocation()) ? ' | ' . $event->getLocation() : '') ?>
+	                        </div>
                         </div>
                     <?php } ?>
                 </div>
             <?php } ?>
         </div>
+	    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+	    <script src="https://cdn.jsdelivr.net/npm/tooltipster@4.2.6/dist/js/tooltipster.bundle.min.js"></script>
+	    <script>
+            $(document).ready(function() {
+                $('.event').tooltipster();
+                $('#calendarlegend').tooltipster({
+                    theme: 'tooltipster-light'
+                });
+            });
+	    </script>
     </body>
 </html>

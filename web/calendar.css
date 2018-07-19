@@ -7,7 +7,7 @@ body {
     position: fixed;
 }
 
-.calendarlegend {
+#calendarlegend {
     position: fixed;
     right: 20px;
     height: 20px;
@@ -17,29 +17,14 @@ body {
     border-radius: 3px;
     padding: 5px;
     z-index: 10;
-    overflow: hidden;
     max-width: 30%;
     text-align: center;
-    cursor: default;
+    cursor: pointer;
+    border: 1px solid black;
 }
 
-.calendarlegend .title {
-    text-decoration: underline;
-}
-
-.calendarlegend .calendars {
-    background: inherit;
-    padding: 5px;
-    overflow: hidden;
-}
-
-.calendarlegend .calendars span {
-    display: block;
-    margin: 5px;
-}
-
-.calendarlegend:hover {
-    overflow: visible;
+#calendarlegend #calendars {
+    display: none;
 }
 
 h3 {
@@ -102,4 +87,9 @@ h3 {
     white-space: nowrap;
     padding: 2px 3px;
     margin-bottom: 1px;
+    cursor: pointer;
+}
+
+.day .event .tooltip {
+    display: none;
 }
