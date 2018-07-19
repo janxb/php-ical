@@ -136,6 +136,20 @@ class Event
         return $result;
     }
 
+    /**
+     * Check if an event is from today. This is true, if it has at least a start- or end-date.
+     * This method is needed, because the native calendar library sometimes selects events from non-related days.
+     * @param $year
+     * @param $month
+     * @param $day
+     * @return bool
+     */
+    public function isEventFromToday($year, $month, $day) : bool
+    {
+        $durationStringLength = strlen($this->getDuration($year, $month, $day));
+        return $durationStringLength == 0 || $durationStringLength > 5;
+    }
+
     public function getStartTime()
     {
         return $this->dateStart->format('H:i');
