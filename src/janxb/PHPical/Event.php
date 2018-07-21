@@ -17,7 +17,9 @@ class Event
     /** @var IcalEvent */
     private $event;
 
+    /** @var DateTime */
     private $dateStart;
+    /** @var DateTime */
     private $dateEnd;
 
     /** @var  string */
