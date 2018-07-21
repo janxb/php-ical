@@ -19,9 +19,8 @@ $currentMonth = date('m');
     </head>
     <body>
         <h3>
-            <?= date("F", mktime(0, 0, 0, $month, 1, $year)) . ' ' . $year ?><br>
-            <a href="?<?= \janxb\PHPical\DateCalculator::previousMonth($year, $month) ?>">&lArr;</a>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="?<?= \janxb\PHPical\DateCalculator::previousMonth($year, $month) ?>">&lArr;</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<?= date("F", mktime(0, 0, 0, $month, 1, $year)) . ' ' . $year ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <a href="?<?= \janxb\PHPical\DateCalculator::nextMonth($year, $month) ?>">&rArr;</a>
         </h3>
 
