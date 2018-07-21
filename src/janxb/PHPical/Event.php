@@ -39,14 +39,7 @@ class Event
         $this->timezone = $timezone;
         $this->event = $event;
         $this->uuid = uniqid();
-        /** @noinspection PhpUndefinedFieldInspection */
-        $this->dateStart = new DateTime($this->event->dtstart_tz);
-        /** @noinspection PhpUndefinedFieldInspection */
-        if (isset($this->event->dtend_tz))
-            /** @noinspection PhpUndefinedFieldInspection */
-            $this->dateEnd = new DateTime($this->event->dtend_tz);
-        else
-            $this->dateEnd = $this->dateStart;
+       	$this->buildDates();
 
         $this->title = str_replace('\n', ', ', $this->event->summary);
         $this->title = stripslashes($this->title);
@@ -54,6 +47,21 @@ class Event
         $this->location = str_replace('\n', ', ', $this->event->location);
         $this->location = stripslashes($this->location);
     }
+
+    private function buildDates(){
+    	if (!isset($this->event->dtend)){
+    		$this->event->dtend = $this->event->dtstart;
+		}
+    	if ($this->event->sequence != null){
+			$this->dateStart = new DateTime($this->event->dtstart);
+			$this->dateEnd = new DateTime($this->event->dtend);
+		} else {
+			/** @noinspection PhpUndefinedFieldInspection */
+			$this->dateStart = new DateTime($this->event->dtstart_tz);
+			/** @noinspection PhpUndefinedFieldInspection */
+			$this->dateEnd = new DateTime($this->event->dtend_tz);
+		}
+	}
 
     /**
      * @return string
