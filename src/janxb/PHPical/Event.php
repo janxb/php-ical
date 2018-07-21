@@ -157,7 +157,7 @@ class Event
     public function isEventFromToday($year, $month, $day) : bool
     {
         $durationStringLength = strlen($this->getDuration($year, $month, $day));
-        return $durationStringLength == 0 || $durationStringLength > 5;
+        return $durationStringLength == 0 || $durationStringLength > 5 || $this->getFullDayCount() > 0;
     }
 
     public function getStartTime()
