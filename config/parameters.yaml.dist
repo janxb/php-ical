@@ -1,0 +1,8 @@
+parameters:
+  language: en
+  calendar_urls: []
+  calendar_names: []
+  calendar_colors:
+  - green
+  - blue
+  - brown

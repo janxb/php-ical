@@ -1,0 +1,137 @@
+[v-cloak] {
+    display: none;
+}
+
+body {
+    font-family: "Verdana", sans-serif;
+    font-size: 0.9em;
+}
+
+#app {
+    margin-top: 10px;
+}
+
+#calendar {
+    position: fixed;
+    top: 60px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+}
+
+.day {
+    display: block;
+    float: left;
+    width: 14.25%;
+    height: 16.2%;
+    border: 1px solid black;
+    margin-right: -1px;
+    margin-bottom: -1px;
+    padding: 5px;
+    overflow-y: hidden;
+}
+
+.event {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 0.9em;
+    border-radius: 2px;
+    margin-bottom: 2px;
+    padding: 1px 5px;
+}
+
+.event .date {
+    font-weight: bold;
+}
+
+.event.fullDay {
+    font-weight: bold;
+}
+
+.day.previousMonth,
+.day.nextMonth {
+    background: lightgray;
+}
+
+.day.currentDay {
+    background: #f4d8d7;
+}
+
+.dayNumber {
+    width: 10px;
+}
+
+#header .day {
+    background: darkgray;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    line-height: 1em;
+    overflow-x: hidden;
+}
+
+.loadingIndicator {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    text-align: center;
+    font-size: 5em;
+}
+
+.loadingIndicator .background {
+    background: #ddd;
+    opacity: 0.7;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+}
+
+.loadingIndicator i {
+    background: white;
+    border-radius: 900px;
+    padding: 10px;
+    box-shadow: 0 0 10px gray;
+}
+
+#top {
+    text-align: center;
+    width: 100%;
+}
+
+#top #month {
+    font-weight: bold;
+    font-size: 1.7em;
+    margin: 0 20px;
+    vertical-align: middle;
+}
+
+#eventDetails th {
+    width: 30px;
+    padding-right: 0;
+    margin-right: 0;
+}
+
+#eventDetails .date-inline {
+    display: inline-block;
+    text-align: center;
+    padding-right: 20px;
+}
+
+.date-inline.date-arrow {
+    font-size: 1.5em;
+}
+
+#eventDetails .modal-body {
+    padding-top: 0;
+}
+
+#eventDetails .table > tbody > tr:first-child > td,
+#eventDetails .table > tbody > tr:first-child > th {
+    border: none;
+}

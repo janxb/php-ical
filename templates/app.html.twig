@@ -1,0 +1,72 @@
+<div id="app" v-cloak>
+    <div id="top">
+        <button class="btn btn-secondary" @click="navigateMonth(-1)"><i class="fas fa-arrow-left"></i></button>
+        <span id="month">{{ month | monthName }} {{ year }}</span>
+        <button class="btn btn-secondary" @click="navigateMonth(+1)"><i class="fas fa-arrow-right"></i></button>
+    </div>
+    <div id="calendar">
+        <div id="header">
+            <div class="day" v-for="day in [1,2,3,4,5,6,0]">{{ day | dayName }}</div>
+        </div>
+        <div class="day previousMonth" v-for="day in daysInPreviousMonth">
+            <span class="dayNumber">{{ day }}</span>
+        </div>
+        <div class="day currentMonth" v-for="day in daysInMonth" :class="{currentDay: isCurrentDay(month, day)}">
+            <span class="dayNumber">{{ day }}</span>
+            <div v-for="calendar in calendars" :data-color="calendar.color">
+                <div class="event"
+                     @click="showEventDetails(event)"
+                     v-for="event in calendar.events"
+                     :class="{ fullDay: event.isFullDay }"
+                     v-if="isEventOnDay(event, day)"
+                     :title="event.summary">
+                    <template v-if="!event.isFullDay">
+                        <span class="date" v-if="isEventStartingToday(event, month, day)">{{ event.dateStart | time }}</span>
+                        <span class="date">-</span>
+                        <span class="date" v-if="isEventEndingToday(event, month, day)">{{ event.dateEnd | time }}</span>
+                    </template>
+                    <span class="summary">{{ event.summary }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="day nextMonth" v-for="day in daysInNextMonth">
+            <span class="dayNumber">{{ day }}</span>
+        </div>
+        <div class="loadingIndicator" v-if="isLoading">
+            <div class="background"></div>
+            <i class="fas fa-spinner fa-spin"></i>
+        </div>
+    </div>
+    <div id="eventDetails" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" v-if="event != null">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ event.summary }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table width="100%" class="table">
+                        <tr class="first">
+                            <th scope="row"><i class="far fa-calendar-alt"></i></th>
+                            <td>
+                                <div class="date-inline">{{ event.dateStart | date }}<br>{{ event.dateStart | time }}</div>
+                                <div class="date-inline date-arrow"><i class="fas fa-long-arrow-alt-right"></i></div>
+                                <div class="date-inline">{{ event.dateEnd | date }}<br>{{ event.dateEnd | time }}</div>
+                            </td>
+                        </tr>
+                        <tr v-if="event.description">
+                            <th scope="row"><i class="fas fa-comment-alt"></i></th>
+                            <td>{{ event.description }}</td>
+                        </tr>
+                        <tr v-if="event.location">
+                            <th scope="row"><i class="fas fa-map"></i></th>
+                            <td><a :href="'https://maps.google.com/?q='+event.location" target="_blank">{{ event.location }}</a></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
