@@ -19,6 +19,7 @@
                      v-for="event in calendar.events"
                      :class="{ fullDay: event.isFullDay, hidden: isLoading }"
                      v-if="isEventOnDay(event, day)"
+                     data-toggle="tooltip"
                      :title="event.summary">
                     <template v-if="!event.isFullDay">
                         <span class="date" v-if="isEventStartingToday(event, month, day)">{{ event.dateStart | time }}</span>

@@ -43,7 +43,7 @@ $('document').ready(function () {
                     });
                     app.calendars = calendars;
                     sleep(10).then(() => {
-                        $('.event').tooltipster();
+                        $('[data-toggle="tooltip"]').tooltip('dispose').tooltip({placement: 'top', boundary: 'window'});
                         app.initEventColors();
                         app.isLoading = false;
                     });
