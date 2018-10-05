@@ -50,6 +50,10 @@ body {
     font-weight: bold;
 }
 
+.event.hidden {
+    display: none;
+}
+
 .day.previousMonth,
 .day.nextMonth {
     background: lightgray;
