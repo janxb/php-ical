@@ -11,7 +11,7 @@ php:
 script:
   - curl -sS https://getcomposer.org/installer | php -- --install-dir=/tmp --filename=composer
   - /tmp/composer install
-  - lftp -e "set ftp:ssl-allow no; mirror -Rev --exclude-glob .git* --exclude .git/ --exclude var/cache/ . $DIRECTORY; quit" -u $USERNAME,$PASSWORD $HOST
+  - lftp -e "set ftp:ssl-allow no; mirror -Re --parallel=10 --exclude-glob .git* --exclude .git/ --exclude var/cache/ . $DIRECTORY; quit" -u $USERNAME,$PASSWORD $HOST
 env:
   global:
   - secure: UvIm7Wc72aZXM7FjAiAfKYAEt+JssebYoGGbFJCQc0MhFOIBapHO7Fx8SsOzKcd8FoceGIMkkpnHH/gvsbHtR63aG4BNWKewEe93db75Hi6DhDgWCjhwQnnMB3AUWZarJO2Xw2PY/Ime/C5fqBeHYFM5OJEuAvflRXja5240tix2JZ17n32oe48xgcp305TMQlXtzz6JIr+2NeUjt0b4qkBBzI/z8CGPebhVnYfiFi57CkJtaTCIlRZTHdR9iLjy9PBqnF8Y3fh0xFWCUP4hvBAKiLK/kAsTzVeQIpR24WbAqkQoUkzB/g2m3HNdYdN6/WLNrJNj4a87goUVmBhcjyJ3KUctRYw0Ckgidhwezdjymok8Kh3KGSfz58VrhyD2x3eV2kWHJ35Pxy9iv85JbhVWLQm2hYSnJHnXKNE2KTB6xQ33XsAK1Kr1r2k7+3JFnvFL5grH6uBP6B9aooYMZieP7NzPlx/cFG+/neMx71RoHn4jo7cJkOKBXUyq3GTDvEQKRL6mvfXl0TWywOCjm7+x1LnGo9F6FcIEjmes4XT1bhY4qdhb7xYCOjnZ0LQFeGwqWGK+ma0qB4fE2/l53Un82qqR6xa8BAB1e6ilYXqrkIEaTFNvLm6Zh2S/8hEiJXkgHc2EJ9O5btFvBE1X58awd0NUQdXKaWlUqiKZ0pg=
