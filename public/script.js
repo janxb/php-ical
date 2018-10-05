@@ -11,10 +11,13 @@ $('document').ready(function () {
             year: moment().format('YYYY'),
             month: moment().format('MM'),
             calendars: [],
-            isLoading: true,
+            pendingRequests: 0,
             event: null
         },
         computed: {
+            isLoading: function () {
+                return this.pendingRequests > 0;
+            },
             daysInMonth: function () {
                 let dayCount = moment(this.year + '-' + this.month, 'YYYY-MM').daysInMonth();
                 return _.range([start = 1], dayCount + 1, [step = 1]);
@@ -33,7 +36,7 @@ $('document').ready(function () {
         watch: {},
         methods: {
             loadEvents: function () {
-                this.isLoading = true;
+                this.pendingRequests++;
                 $.getJSON('api/events/' + this.year + '/' + this.month, function (calendars) {
                     calendars.forEach(function (calendar) {
                         calendar.events.forEach(function (event) {
@@ -45,7 +48,7 @@ $('document').ready(function () {
                     sleep(10).then(() => {
                         $('[data-toggle="tooltip"]').tooltip('dispose').tooltip({placement: 'top', boundary: 'window'});
                         app.initEventColors();
-                        app.isLoading = false;
+                        app.pendingRequests--;
                     });
                 });
             },
