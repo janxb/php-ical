@@ -65,12 +65,12 @@
     },
     "parameter-handler": "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
     "post-install-cmd": [
-      "@auto-scripts",
-      "@parameter-handler"
+      "@parameter-handler",
+      "@auto-scripts"
     ],
     "post-update-cmd": [
-      "@auto-scripts",
-      "@parameter-handler"
+      "@parameter-handler",
+      "@auto-scripts"
     ]
   },
   "conflict": {
