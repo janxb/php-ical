@@ -89,6 +89,7 @@ $('document').ready(function () {
                         $this.css('background', $this.parent().data('color'));
                         $this.css('color', 'white');
                     } else {
+                        $this.css('background', 'white');
                         $this.css('color', $this.parent().data('color'));
                     }
                 });
