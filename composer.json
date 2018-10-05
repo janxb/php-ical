@@ -8,6 +8,7 @@
     "incenteev/composer-parameter-handler": "^2.1",
     "johngrogg/ics-parser": "^2.1",
     "sensio/framework-extra-bundle": "^5.1",
+    "symfony/apache-pack": "^1.0",
     "symfony/asset": "*",
     "symfony/cache": "*",
     "symfony/console": "*",
