@@ -17,6 +17,8 @@ class EventToJsonConverter
     {
         $result = [];
         foreach ($events as $event) {
+            $this->fixMissingEventProperties($event);
+
             $json = new EventJson();
             $json->uid = $event->uid;
             $json->summary = $event->summary;
@@ -24,11 +26,20 @@ class EventToJsonConverter
             $json->location = $event->location;
             $json->dateStart = $event->dtstart_tz;
             $json->dateEnd = $event->dtend_tz;
+
             $this->handleEventFullDay($event, $json);
             $this->handleEventMultiDay($json);
             $result[] = $json;
         }
         return $result;
+    }
+
+    private function fixMissingEventProperties($event)
+    {
+        if (!property_exists($event, 'dtend_tz'))
+            $event->dtend_tz = $event->dtstart_tz;
+        if (is_null($event->dtend))
+            $event->dtend = $event->dtstart;
     }
 
     private function handleEventFullDay(Event $event, EventJson &$json)
