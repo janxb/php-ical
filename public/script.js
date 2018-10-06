@@ -12,7 +12,9 @@ $('document').ready(function () {
             month: moment().format('MM'),
             calendars: [],
             pendingRequests: 0,
-            event: null
+            event: null,
+            password: Cookies.get('password'),
+            rawPassword: ""
         },
         computed: {
             isLoading: function () {
@@ -33,24 +35,43 @@ $('document').ready(function () {
                 return 7 * 6 - (this.daysInPreviousMonth.length + this.daysInMonth.length);
             }
         },
-        watch: {},
+        watch: {
+            rawPassword: function (value) {
+                this.password = CryptoJS.SHA1(value).toString();
+            }
+        },
         methods: {
+            savePassword: function () {
+                document.location.hash = 'p=' + this.password;
+                $('#passwordModal').modal('hide');
+            },
             loadEvents: function () {
                 this.pendingRequests++;
-                $.getJSON('api/events/' + this.year + '/' + this.month, function (calendars) {
-                    calendars.forEach(function (calendar) {
-                        calendar.events.forEach(function (event) {
-                            event.dateStart = moment(event.dateStart);
-                            event.dateEnd = moment(event.dateEnd);
+                $.getJSON('api/events/' + this.year + '/' + this.month + '?p=' + this.password,
+                    function (calendars) {
+                        calendars.forEach(function (calendar) {
+                            calendar.events.forEach(function (event) {
+                                event.dateStart = moment(event.dateStart);
+                                event.dateEnd = moment(event.dateEnd);
+                            });
                         });
-                    });
-                    app.calendars = calendars;
-                    sleep(10).then(() => {
-                        $('[data-toggle="tooltip"]').tooltip('dispose').tooltip({placement: 'top', boundary: 'window'});
-                        app.initEventColors();
+                        app.calendars = calendars;
+                        sleep(10).then(() => {
+                            $('[data-toggle="tooltip"]').tooltip('dispose').tooltip({
+                                placement: 'top',
+                                boundary: 'window'
+                            });
+                            app.initEventColors();
+                            app.pendingRequests--;
+                        });
+                    }
+                ).fail(function (response) {
+                    if (response.status === 403) {
+                        $('#passwordModal').modal('show');
                         app.pendingRequests--;
-                    });
-                });
+                    }
+                })
+                ;
             },
             isEventOnDay: function (event, day) {
                 return moment().range(
@@ -77,7 +98,7 @@ $('document').ready(function () {
                     this.year++;
                 }
                 this.month = _.padStart(this.month, 2, '0');
-                this.loadEvents();
+                document.location.hash = 'y=' + this.year + '&m=' + this.month;
             },
             showEventDetails: function (event) {
                 this.event = event;
@@ -96,6 +117,27 @@ $('document').ready(function () {
                         $this.css('color', $this.parent().data('color'));
                     }
                 });
+            },
+            parseHash: function () {
+                const urlPassword = url('#p');
+                const urlMonth = url('#m');
+                const urlYear = url('#y');
+                if (urlPassword) {
+                    Cookies.set('password', urlPassword, {expires: 365});
+                    this.password = urlPassword;
+                    history.replaceState({}, document.title, ".");
+                }
+
+                if (url('#m'))
+                    this.month = url('#m');
+                if (url('#y'))
+                    this.year = url('#y');
+
+                if (!url('#m') || !url('#y'))
+                    this.navigateMonth(0);
+                else
+                    this.loadEvents();
+
             }
         },
         filters: {
@@ -116,7 +158,10 @@ $('document').ready(function () {
             }
         },
         beforeMount() {
-            this.loadEvents();
+            this.parseHash();
+            $(window).on('hashchange', function () {
+                app.parseHash();
+            });
         }
     });
 });

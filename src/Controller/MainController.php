@@ -53,6 +53,12 @@ class MainController extends AbstractController
      */
     public function getEvents(Request $request, $year, $month, CacheInterface $cache)
     {
+        $passwords = $this->getParameter("passwords");
+        if (!is_array($passwords)) $passwords = [$passwords];
+        foreach ($passwords as &$password) {
+            $password = sha1($password);
+        }
+
         $calendarUrls = $this->getParameter("calendar_urls");
         if (!is_array($calendarUrls)) $calendarUrls = [$calendarUrls];
 
@@ -61,6 +67,13 @@ class MainController extends AbstractController
 
         $calendarNames = $this->getParameter("calendar_names");
         if (!is_array($calendarNames)) $calendarNames = [$calendarNames];
+
+        $requestPassword = $request->get('p');
+
+        if (!empty($passwords)) {
+            if (!in_array($requestPassword, $passwords))
+                return new JsonResponse(null, 403);
+        }
 
         //$cache = new FilesystemCache();
         $result = [];

@@ -1,5 +1,6 @@
 parameters:
   language: en
+  passwords: []
   calendar_urls: []
   calendar_names: []
   calendar_colors:
