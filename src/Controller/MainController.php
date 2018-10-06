@@ -39,9 +39,14 @@ class MainController extends AbstractController
         ]);
     }
 
-    private function buildCacheUrl($calendarUrl, $year, $month)
+    private function buildEventCacheUrl($calendarUrl, $year, $month)
     {
         return 'calendar.' . md5($calendarUrl) . '.' . $year . '.' . $month;
+    }
+
+    private function buildCalendarCacheUrl($calendarUrl)
+    {
+        return 'calendar.' . md5($calendarUrl);
     }
 
     /**
@@ -80,10 +85,15 @@ class MainController extends AbstractController
         $startDate = DateTime::createFromFormat('Ymd', $year . $month . '01');
         $endDate = (clone $startDate)->add(new DateInterval('P1M'));
         foreach ($calendarUrls as $index => $calendarUrl) {
-            if ($cache->has($this->buildCacheUrl($calendarUrl, $year, $month))) {
-                $result[] = $cache->get($this->buildCacheUrl($calendarUrl, $year, $month));
+            if ($cache->has($this->buildEventCacheUrl($calendarUrl, $year, $month))) {
+                $result[] = $cache->get($this->buildEventCacheUrl($calendarUrl, $year, $month));
             } else {
-                $ical = new ICal($calendarUrl);
+                if ($cache->has($this->buildCalendarCacheUrl($calendarUrl))) {
+                    $ical = $cache->get($this->buildCalendarCacheUrl($calendarUrl));
+                } else {
+                    $ical = new ICal($calendarUrl);
+                    $cache->set($this->buildCalendarCacheUrl($calendarUrl), $ical, 1);
+                }
                 $calendar = new CalendarJson();
                 $calendar->name = $calendarNames[$index];
                 $calendar->description = $ical->calendarDescription();
@@ -93,7 +103,7 @@ class MainController extends AbstractController
                     $startDate->format('Ymd'),
                     $endDate->format('Ymd'))
                 );
-                $cache->set($this->buildCacheUrl($calendarUrl, $year, $month), $calendar, 3600);
+                $cache->set($this->buildEventCacheUrl($calendarUrl, $year, $month), $calendar, 1);
             }
         }
         return new JsonResponse($result);
