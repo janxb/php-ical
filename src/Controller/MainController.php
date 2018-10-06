@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MainController extends AbstractController
 {
-
+    private const CACHE_TTL = 3600;
 
     /**
      * @param Request $request
@@ -92,7 +92,7 @@ class MainController extends AbstractController
                     $ical = $cache->get($this->buildCalendarCacheUrl($calendarUrl));
                 } else {
                     $ical = new ICal($calendarUrl);
-                    $cache->set($this->buildCalendarCacheUrl($calendarUrl), $ical, 1);
+                    $cache->set($this->buildCalendarCacheUrl($calendarUrl), $ical, self::CACHE_TTL);
                 }
                 $calendar = new CalendarJson();
                 $calendar->name = $calendarNames[$index];
@@ -103,7 +103,7 @@ class MainController extends AbstractController
                     $startDate->format('Ymd'),
                     $endDate->format('Ymd'))
                 );
-                $cache->set($this->buildEventCacheUrl($calendarUrl, $year, $month), $calendar, 1);
+                $cache->set($this->buildEventCacheUrl($calendarUrl, $year, $month), $calendar, self::CACHE_TTL);
             }
         }
         return new JsonResponse($result);
