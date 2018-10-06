@@ -22,7 +22,7 @@ class EventToJsonConverter
             $json = new EventJson();
             $json->uid = $event->uid;
             $json->summary = $event->summary;
-            $json->description = $event->description;
+            $json->description = str_replace("\n", '<br>', $event->description);
             $json->location = $event->location;
             $json->dateStart = $event->dtstart_tz;
             $json->dateEnd = $event->dtend_tz;

@@ -59,7 +59,7 @@
                         </tr>
                         <tr v-if="event.description">
                             <th scope="row"><i class="fas fa-comment-alt"></i></th>
-                            <td>{{ event.description }}</td>
+                            <td v-html="event.description"></td>
                         </tr>
                         <tr v-if="event.location">
                             <th scope="row"><i class="fas fa-map"></i></th>
