@@ -134,7 +134,9 @@ $('document').ready(function () {
                     this.year = url('#y');
 
                 if (!url('#m') || !url('#y'))
-                    this.navigateMonth(0);
+                    sleep(10).then(() => {
+                        this.navigateMonth(0);
+                    });
                 else
                     this.loadEvents();
 
