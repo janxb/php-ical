@@ -31,7 +31,7 @@ class MainController extends AbstractController
     public function renderFrontend(Request $request)
     {
         $allowedLanguages = $this->getParameter('allowedLanguages');
-        $selectedLanguage = $this->getParameter('language');
+        $selectedLanguage = $this->getParameter('calendar_language');
         if (!in_array($selectedLanguage, $allowedLanguages))
             $selectedLanguage = null;
         return $this->render('base.html.twig', [
@@ -58,20 +58,16 @@ class MainController extends AbstractController
      */
     public function getEvents(Request $request, $year, $month, CacheInterface $cache)
     {
-        $passwords = $this->getParameter("passwords");
-        if (!is_array($passwords)) $passwords = [$passwords];
+        $passwords = explode(',', $this->getParameter("calendar_passwords"));
         foreach ($passwords as &$password) {
             $password = sha1($password);
         }
 
-        $calendarUrls = $this->getParameter("calendar_urls");
-        if (!is_array($calendarUrls)) $calendarUrls = [$calendarUrls];
+        $calendarUrls = array_map('trim', explode(',', $this->getParameter("calendar_urls")));
 
-        $calendarColors = $this->getParameter("calendar_colors");
-        if (!is_array($calendarColors)) $calendarColors = [$calendarColors];
+        $calendarColors = array_map('trim', explode(',', $this->getParameter("calendar_colors")));
 
-        $calendarNames = $this->getParameter("calendar_names");
-        if (!is_array($calendarNames)) $calendarNames = [$calendarNames];
+        $calendarNames = array_map('trim', explode(',', $this->getParameter("calendar_names")));
 
         $requestPassword = $request->get('p');
 

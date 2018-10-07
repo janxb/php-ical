@@ -1,9 +1,6 @@
 parameters:
-  language: en
-  passwords: []
-  calendar_urls: []
-  calendar_names: []
-  calendar_colors:
-  - green
-  - blue
-  - brown
+  calendar_language: '%env(CALENDAR_LANGUAGE)%'
+  calendar_urls: '%env(CALENDAR_URLS)%'
+  calendar_names: '%env(CALENDAR_NAMES)%'
+  calendar_colors: '%env(CALENDAR_COLORS)%'
+  calendar_passwords: '%env(CALENDAR_PASSWORDS)%'
