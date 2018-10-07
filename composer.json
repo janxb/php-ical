@@ -72,6 +72,10 @@
     "post-update-cmd": [
       "@parameter-handler",
       "@auto-scripts"
+    ],
+    "warmup": [
+      "@parameter-handler",
+      "@auto-scripts"
     ]
   },
   "conflict": {
