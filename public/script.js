@@ -98,7 +98,8 @@ $('document').ready(function () {
                     this.year++;
                 }
                 this.month = _.padStart(this.month, 2, '0');
-                document.location.hash = 'y=' + this.year + '&m=' + this.month;
+                history.replaceState(null, null, document.location.pathname + '#' + 'y=' + this.year + '&m=' + this.month);
+                this.loadEvents();
             },
             showEventDetails: function (event) {
                 this.event = event;
