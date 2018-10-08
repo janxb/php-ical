@@ -59,6 +59,7 @@ class MainController extends AbstractController
     public function getEvents(Request $request, $year, $month, CacheInterface $cache)
     {
         $passwords = explode(',', $this->getParameter("calendar_passwords"));
+        $isPasswordsEnabled = !empty($passwords[0]) || count($passwords) > 1;
         foreach ($passwords as &$password) {
             $password = sha1($password);
         }
@@ -71,7 +72,8 @@ class MainController extends AbstractController
 
         $requestPassword = $request->get('p');
 
-        if (!empty($passwords)) {
+        dump($isPasswordsEnabled);
+        if ($isPasswordsEnabled) {
             if (!in_array($requestPassword, $passwords))
                 return new JsonResponse(null, 403);
         }
