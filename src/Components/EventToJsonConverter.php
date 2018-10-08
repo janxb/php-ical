@@ -16,22 +16,47 @@ class EventToJsonConverter
     public function convert(ICal $calendar, array $events)
     {
         $result = [];
+        /** @var Event $event */
         foreach ($events as $event) {
             $this->fixMissingEventProperties($event);
+            $this->fixFullDayEventsMissingTime($event);
+            $this->fixTimestampsAlreadyInLocalTime($event);
 
             $json = new EventJson();
             $json->uid = $event->uid;
             $json->summary = $event->summary;
             $json->description = str_replace("\n", '<br>', $event->description);
             $json->location = $event->location;
+            /** @noinspection PhpUndefinedFieldInspection */
             $json->dateStart = $event->dtstart_tz;
+            /** @noinspection PhpUndefinedFieldInspection */
             $json->dateEnd = $event->dtend_tz;
 
-            $this->handleEventFullDay($event, $json);
-            $this->handleEventMultiDay($json);
+            $this->setFullDayProperty($json);
+            $this->setMultiDayProperty($json);
+
             $result[] = $json;
         }
         return $result;
+    }
+
+    private function fixFullDayEventsMissingTime(Event $event)
+    {
+        if (strlen($event->dtstart) == 8) {
+            $event->dtstart = $event->dtstart . 'T000000';
+            $event->dtend = $event->dtend . 'T000000';
+        }
+    }
+
+    private function fixTimestampsAlreadyInLocalTime($event)
+    {
+        if (
+            !StringHelper::stringEndsWith($event->dtstart, 'Z') // date has no UTC marker
+            && strlen($event->dtstart) == 15 // timestamp includes time part (if not, it's a full-time event
+        ) {
+            $event->dtstart_tz = $event->dtstart;
+            $event->dtend_tz = $event->dtend;
+        }
     }
 
     private function fixMissingEventProperties($event)
@@ -42,22 +67,14 @@ class EventToJsonConverter
             $event->dtend = $event->dtstart;
     }
 
-    private function handleEventFullDay(Event $event, EventJson &$json)
+    private function setFullDayProperty(EventJson $json)
     {
-        $json->isFullDay = strlen($event->dtstart) == 8 ||
-            (DateHelper::getDateDifference($event->dtstart, $event->dtend) == 1
-                && DateHelper::getTimeFromDateTimeString($event->dtstart) == 0
-                && DateHelper::getTimeFromDateTimeString($event->dtend) == 0
-            );
-        if ($json->isFullDay) {
-            $json->dateStart = substr($json->dateStart, 0, -6) . '000000';
-            $dateEnd = (DateHelper::getDateDifference($json->dateStart, $json->dateEnd) == 1)
-                ? $json->dateStart : $json->dateEnd;
-            $json->dateEnd = substr($dateEnd, 0, -6) . '000000';
-        }
+        $json->isFullDay =
+            DateHelper::getTimeFromDateTimeString($json->dateStart) == 0
+            && DateHelper::getTimeFromDateTimeString($json->dateEnd) == 0;
     }
 
-    private function handleEventMultiDay(EventJson $json)
+    private function setMultiDayProperty(EventJson $json)
     {
         $json->isMultiDay =
             substr($json->dateStart, 0, 8) !=
