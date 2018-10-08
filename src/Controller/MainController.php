@@ -72,7 +72,6 @@ class MainController extends AbstractController
 
         $requestPassword = $request->get('p');
 
-        dump($isPasswordsEnabled);
         if ($isPasswordsEnabled) {
             if (!in_array($requestPassword, $passwords))
                 return new JsonResponse(null, 403);
