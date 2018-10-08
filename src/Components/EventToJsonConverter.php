@@ -43,8 +43,12 @@ class EventToJsonConverter
     private function fixFullDayEventsMissingTime(Event $event)
     {
         if (strlen($event->dtstart) == 8) {
+            $dateEnd =
+                ($event->dtend - $event->dtstart <= 1)
+                    ? $event->dtstart
+                    : $event->dtend;
             $event->dtstart = $event->dtstart . 'T000000';
-            $event->dtend = $event->dtend . 'T000000';
+            $event->dtend = $dateEnd . 'T000000';
         }
     }
 
