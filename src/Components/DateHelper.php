@@ -4,6 +4,8 @@
 namespace App\Components;
 
 
+use DateTime;
+
 class DateHelper
 {
     public static function getDateFromDateTimeString(string $dateTimeString)
@@ -16,10 +18,10 @@ class DateHelper
         return rtrim(substr($dateTimeString, 10, 6), 'Z');
     }
 
-    public static function getDateDifference(string $dateStringA, string $dateStringB)
+    public static function getDateDifference(string $dateStringA, string $dateStringB, string $format)
     {
-        return abs(
-            self::getDateFromDateTimeString($dateStringB) - self::getDateFromDateTimeString($dateStringA)
-        );
+        $dateA = DateTime::createFromFormat($format, $dateStringA);
+        $dateB = DateTime::createFromFormat($format, $dateStringB);
+        return abs($dateA->diff($dateB)->format("%a"));
     }
 }

@@ -43,8 +43,9 @@ class EventToJsonConverter
     private function fixFullDayEventsMissingTime(Event $event)
     {
         if (strlen($event->dtstart) == 8) {
+            $dateDifferenceDays = DateHelper::getDateDifference($event->dtstart, $event->dtend, 'Ymd');
             $dateEnd =
-                ($event->dtend - $event->dtstart <= 1)
+                ($dateDifferenceDays <= 1)
                     ? $event->dtstart
                     : $event->dtend;
             $event->dtstart = $event->dtstart . 'T000000';
