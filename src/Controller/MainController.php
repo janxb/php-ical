@@ -21,8 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MainController extends AbstractController
 {
-    private const CACHE_TTL = 3600;
-
     /**
      * @param Request $request
      * @Route("/")
@@ -58,6 +56,7 @@ class MainController extends AbstractController
      */
     public function getEvents(Request $request, $year, $month, CacheInterface $cache)
     {
+        $cacheTimeout = intval($this->getParameter("calendar_cache_ttl"));
         $passwords = explode(',', $this->getParameter("calendar_passwords"));
         $isPasswordsEnabled = !empty($passwords[0]) || count($passwords) > 1;
         foreach ($passwords as &$password) {
@@ -89,7 +88,7 @@ class MainController extends AbstractController
                     $ical = $cache->get($this->buildCalendarCacheUrl($calendarUrl));
                 } else {
                     $ical = new ICal($calendarUrl);
-                    $cache->set($this->buildCalendarCacheUrl($calendarUrl), $ical, self::CACHE_TTL);
+                    $cache->set($this->buildCalendarCacheUrl($calendarUrl), $ical, $cacheTimeout);
                 }
                 $calendar = new CalendarJson();
                 $calendar->name = $calendarNames[$index];
@@ -100,7 +99,7 @@ class MainController extends AbstractController
                     $startDate->format('Ymd'),
                     $endDate->format('Ymd'))
                 );
-                $cache->set($this->buildEventCacheUrl($calendarUrl, $year, $month), $calendar, self::CACHE_TTL);
+                $cache->set($this->buildEventCacheUrl($calendarUrl, $year, $month), $calendar, $cacheTimeout);
             }
         }
         return new JsonResponse($result);
