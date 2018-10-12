@@ -19,6 +19,7 @@ class EventToJsonConverter
         /** @var Event $event */
         foreach ($events as $event) {
             $this->fixMissingEventProperties($event);
+            $this->fixRepeatedFullDayEventsAlreadyInLocalTime($event);
             $this->fixFullDayEventsMissingTime($event);
             $this->fixTimestampsAlreadyInLocalTime($event);
 
@@ -50,6 +51,16 @@ class EventToJsonConverter
                     : $event->dtend;
             $event->dtstart = $event->dtstart . 'T000000';
             $event->dtend = $dateEnd . 'T000000';
+        }
+    }
+
+    private function fixRepeatedFullDayEventsAlreadyInLocalTime($event)
+    {
+        if (property_exists($event, 'rrule') &&
+            DateHelper::getTimeFromDateTimeString($event->dtstart) == 0
+        ) {
+            $event->dtstart = substr($event->dtstart, 0, 8);
+            $event->dtend = substr($event->dtend, 0, 8);
         }
     }
 
