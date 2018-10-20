@@ -48,7 +48,7 @@ class EventToJsonConverter
             $dateEnd =
                 ($dateDifferenceDays <= 1)
                     ? $event->dtstart
-                    : $event->dtend;
+                    : $event->dtend - 1;
             $event->dtstart = $event->dtstart . 'T000000';
             $event->dtend = $dateEnd . 'T000000';
         }
