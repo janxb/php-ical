@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys,re,urllib.request,json,fileinput
+import os,sys,re,urllib.request,json,fileinput
 from prettytable import PrettyTable
 
 def replaceLinesInFile(file,searchExp,replaceExp):
@@ -15,7 +15,7 @@ def updateDependency(name, oldVersion, newVersion, line, filename, updates):
 		replaceLinesInFile(filename, line, updatedLine)
 		updates.add_row([name, oldVersion, newVersion])
 
-filename = sys.argv[1];
+filename = os.path.dirname(os.path.realpath(__file__))+"/../templates/base.html.twig";
 updates = PrettyTable(['Dependency', 'Old Version', 'New Version'])
 for line in open(filename).read().split("\n"):
 	if "cdnjs" in line:
