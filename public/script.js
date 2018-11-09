@@ -11,7 +11,7 @@ $('document').ready(function () {
 			year: moment().format('YYYY'),
 			month: moment().format('MM'),
 			calendars: [],
-			pendingRequests: 0,
+			ajaxRequest: null,
 			event: null,
 			password: Cookies.get('password'),
 			rawPassword: ""
@@ -24,7 +24,7 @@ $('document').ready(function () {
 				return moment().startOf('month');
 			},
 			isLoading: function () {
-				return this.pendingRequests > 0;
+				return this.ajaxRequest && this.ajaxRequest.readyState !== 4;
 			},
 			calendarDays: function () {
 				const days = [];
@@ -83,8 +83,8 @@ $('document').ready(function () {
 				$('#passwordModal').modal('hide');
 			},
 			loadEvents: function () {
-				this.pendingRequests++;
-				$.getJSON('api/events/' + this.year + '/' + this.month + '?p=' + this.password,
+				if (this.ajaxRequest) this.ajaxRequest.abort();
+				this.ajaxRequest = $.getJSON('api/events/' + this.year + '/' + this.month + '?p=' + this.password,
 					function (calendars) {
 						calendars.forEach(function (calendar) {
 							calendar.events.forEach(function (event) {
@@ -100,13 +100,11 @@ $('document').ready(function () {
 								boundary: 'window'
 							});
 							app.initEventColors();
-							app.pendingRequests--;
 						});
 					}
 				).fail(function (response) {
 					if (response.status === 403) {
 						$('#passwordModal').modal('show');
-						app.pendingRequests--;
 					}
 				})
 				;
