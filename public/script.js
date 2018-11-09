@@ -12,6 +12,7 @@ $('document').ready(function () {
 			month: moment().format('MM'),
 			calendars: [],
 			ajaxRequest: null,
+			pendingRequests: 0,
 			event: null,
 			password: Cookies.get('password'),
 			rawPassword: ""
@@ -24,7 +25,7 @@ $('document').ready(function () {
 				return moment().startOf('month');
 			},
 			isLoading: function () {
-				return this.ajaxRequest && this.ajaxRequest.readyState !== 4;
+				return this.pendingRequests > 0;
 			},
 			calendarDays: function () {
 				const days = [];
@@ -84,8 +85,11 @@ $('document').ready(function () {
 			},
 			loadEvents: function () {
 				if (this.ajaxRequest) this.ajaxRequest.abort();
-				this.ajaxRequest = $.getJSON('api/events/' + this.year + '/' + this.month + '?p=' + this.password,
-					function (calendars) {
+				this.pendingRequests++;
+				this.ajaxRequest = $.ajax({
+					dataType: "json",
+					url: 'api/events/' + this.year + '/' + this.month + '?p=' + this.password,
+					success: function (calendars) {
 						calendars.forEach(function (calendar) {
 							calendar.events.forEach(function (event) {
 								event.calendarName = calendar.name;
@@ -101,13 +105,18 @@ $('document').ready(function () {
 							});
 							app.initEventColors();
 						});
+					},
+					error: function (response) {
+						if (response.status === 403) {
+							$('#passwordModal').modal('show');
+						}
+					},
+					complete: function () {
+						sleep(10).then(() => {
+							app.pendingRequests--;
+						});
 					}
-				).fail(function (response) {
-					if (response.status === 403) {
-						$('#passwordModal').modal('show');
-					}
-				})
-				;
+				});
 			},
 			isEventOnDate: function (event, date) {
 				return moment().range(
