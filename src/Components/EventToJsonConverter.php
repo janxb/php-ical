@@ -93,7 +93,7 @@ class EventToJsonConverter
     private function setMultiDayProperty(EventJson $json)
     {
         $json->isMultiDay =
-            substr($json->dateStart, 0, 8) !=
-            substr($json->dateEnd, 0, 8);
+            DateHelper::getDateFromDateTimeString($json->dateStart) !=
+            DateHelper::getDateFromDateTimeString($json->dateEnd);
     }
 }
