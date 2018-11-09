@@ -4,6 +4,8 @@
 namespace App\Components;
 
 
+use DateInterval;
+use DateTime;
 use ICal\Event;
 use ICal\ICal;
 
@@ -12,6 +14,7 @@ class EventToJsonConverter
     /**
      * @param Event[] $events
      * @return array
+     * @throws \Exception
      */
     public function convert(ICal $calendar, array $events)
     {
@@ -35,10 +38,23 @@ class EventToJsonConverter
 
             $this->setFullDayProperty($json);
             $this->setMultiDayProperty($json);
+            $this->setEventTimeUntilMidnight($json);
 
             $result[] = $json;
         }
         return $result;
+    }
+
+    /**
+     * @param EventJson $json
+     * @throws \Exception
+     */
+    private function setEventTimeUntilMidnight(EventJson $json)
+    {
+        if (!$json->isFullDay && $json->isMultiDay && DateHelper::getTimeFromDateTimeString($json->dateEnd) == 0){
+            $end = DateTime::createFromFormat('Ymd\THis', $json->dateEnd)->sub(new DateInterval('PT1S'));
+            $json->dateEnd = $end->format("Ymd\THis");
+        }
     }
 
     private function fixFullDayEventsMissingTime(Event $event)
