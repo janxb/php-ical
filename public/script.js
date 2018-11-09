@@ -17,6 +17,12 @@ $('document').ready(function () {
 			rawPassword: ""
 		},
 		computed: {
+			selectedMonth: function () {
+				return moment(this.year + "-" + this.month + "-01", "YYYY-MM-DD");
+			},
+			currentMonth: function () {
+				return moment().startOf('month');
+			},
 			isLoading: function () {
 				return this.pendingRequests > 0;
 			},
@@ -117,16 +123,13 @@ $('document').ready(function () {
 			isEventEndingOnDate: function (event, date) {
 				return event.dateEnd.isSame(date, "day");
 			},
+			navigateMonthCurrent: function () {
+				this.navigateMonth(this.currentMonth.diff(this.selectedMonth, 'months'));
+			},
 			navigateMonth: function (step) {
-				this.month = parseInt(this.month) + parseInt(step);
-				if (this.month < 1) {
-					this.month = 12;
-					this.year--;
-				} else if (this.month > 12) {
-					this.month = 1;
-					this.year++;
-				}
-				this.month = _.padStart(this.month, 2, '0');
+				const newMonth = moment(this.selectedMonth).add(step, 'months');
+				this.month = newMonth.format("MM");
+				this.year = newMonth.format("YYYY");
 				history.replaceState(null, null, document.location.pathname + '#' + 'y=' + this.year + '&m=' + this.month);
 				this.loadEvents();
 			},

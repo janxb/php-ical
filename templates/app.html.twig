@@ -1,8 +1,13 @@
 <div id="app" v-cloak>
     <div id="top">
-        <button class="btn btn-secondary" @click="navigateMonth(-1)"><i class="fas fa-arrow-left"></i></button>
-        <span id="month">{{ month | monthName }} {{ year }}</span>
-        <button class="btn btn-secondary" @click="navigateMonth(+1)"><i class="fas fa-arrow-right"></i></button>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <button class="btn btn-secondary" @click="navigateMonthCurrent()"><i class="fas fa-calendar-alt"></i></button>
+                <button class="btn btn-secondary" @click="navigateMonth(-1)"><i class="fas fa-arrow-left"></i></button>
+                <button class="btn btn-secondary" @click="navigateMonth(+1)"><i class="fas fa-arrow-right"></i></button>
+                <span id="month">{{ month | monthName }} {{ year }}</span>
+            </div>
+        </div>
     </div>
     <div id="calendar">
         <div id="header">
