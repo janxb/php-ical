@@ -18,11 +18,11 @@ class AppExtension extends AbstractExtension
     public function getFilters()
     {
         return array(
-            new TwigFilter('hash_version', array($this, 'hashVersion')),
+            new TwigFilter('file_hash', array($this, 'fileHash')),
         );
     }
 
-    public function hashVersion($path)
+    public function fileHash($path)
     {
         return $path . '?v=' . md5_file($this->publicDir . $path);
     }

@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/tooltipster.min.css"/>
-        <link rel="stylesheet" href="{{ asset('style.css') | hash_version }}"/>
+        <link rel="stylesheet" href="{{ asset('style.css') | file_hash }}"/>
     </head>
     <body>
         {{ source('app.html.twig') }}
@@ -32,6 +32,6 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/locale/{{ language }}.js"></script>
         {% endif %}
 
-        <script src="{{ asset('script.js') | hash_version }}"></script>
+        <script src="{{ asset('script.js') | file_hash }}"></script>
     </body>
 </html>
