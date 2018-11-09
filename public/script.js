@@ -82,6 +82,7 @@ $('document').ready(function () {
 					function (calendars) {
 						calendars.forEach(function (calendar) {
 							calendar.events.forEach(function (event) {
+								event.calendarName = calendar.name;
 								event.dateStart = moment(event.dateStart);
 								event.dateEnd = moment(event.dateEnd);
 							});

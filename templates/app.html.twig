@@ -63,6 +63,10 @@
                             <th scope="row"><i class="fas fa-map"></i></th>
                             <td><a :href="'https://maps.google.com/?q='+event.location" target="_blank">{{ event.location }}</a></td>
                         </tr>
+                        <tr>
+                            <th scope="row"><i class="fas fa-user"></i></th>
+                            <td>{{ event.calendarName }}</td>
+                        </tr>
                     </table>
                 </div>
             </div>
