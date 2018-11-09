@@ -150,8 +150,6 @@ $('document').ready(function () {
 			},
 			parseHash: function () {
 				const urlPassword = url('#p');
-				const urlMonth = url('#m');
-				const urlYear = url('#y');
 				if (urlPassword) {
 					Cookies.set('password', urlPassword, {expires: 365});
 					this.password = urlPassword;
