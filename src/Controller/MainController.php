@@ -91,7 +91,6 @@ class MainController extends AbstractController
                 }
                 $calendar = new CalendarJson();
                 $calendar->name = $calendarNames[$index];
-                $calendar->description = $ical->calendarDescription();
                 $calendar->color = $calendarColors[$index];
                 $result[] = $calendar;
                 $calendar->events = (new EventToJsonConverter())->convert($ical, $ical->eventsFromRange(
