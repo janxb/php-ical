@@ -76,10 +76,9 @@ class MainController extends AbstractController
                 return new JsonResponse(null, 403);
         }
 
-        //$cache = new FilesystemCache();
         $result = [];
-        $startDate = DateTime::createFromFormat('Ymd', $year . $month . '01');
-        $endDate = (clone $startDate)->add(new DateInterval('P1M'));
+        $startDate = DateTime::createFromFormat('Ymd', $year . $month . '01')->sub(new DateInterval('P1M'));
+        $endDate = (clone $startDate)->add(new DateInterval('P3M'));
         foreach ($calendarUrls as $index => $calendarUrl) {
             if ($cache->has($this->buildEventCacheUrl($calendarUrl, $year, $month))) {
                 $result[] = $cache->get($this->buildEventCacheUrl($calendarUrl, $year, $month));

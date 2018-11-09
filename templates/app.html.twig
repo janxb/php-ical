@@ -8,30 +8,28 @@
         <div id="header">
             <div class="day" v-for="day in [1,2,3,4,5,6,0]">{{ day | dayName }}</div>
         </div>
-        <div class="day previousMonth" v-for="day in daysInPreviousMonth">
-            <span class="dayNumber">{{ day }}</span>
-        </div>
-        <div class="day currentMonth" v-for="day in daysInMonth" :class="{currentDay: isCurrentDay(month, day)}">
-            <span class="dayNumber">{{ day }}</span>
+        <div class="day" v-for="day in calendarDays"
+             :class="{
+                currentMonth: day.isCurrentMonth,
+                currentDay: day.isCurrentDay
+             }">
+            <span class="dayNumber">{{ day.date.format('D') }}</span>
             <div v-for="calendar in calendars" :data-color="calendar.color">
                 <div class="event"
                      @click="showEventDetails(event)"
                      v-for="event in calendar.events"
                      :class="{ fullDay: event.isFullDay, hidden: isLoading }"
-                     v-if="isEventOnDay(event, day)"
+                     v-if="isEventOnDate(event, day.date)"
                      data-toggle="tooltip"
                      :title="event.summary">
                     <template v-if="!event.isFullDay">
-                        <span class="date" v-if="isEventStartingToday(event, month, day)">{{ event.dateStart | time }}</span>
+                        <span class="date" v-if="isEventStartingOnDate(event, day.date)">{{ event.dateStart | time }}</span>
                         <span class="date">-</span>
-                        <span class="date" v-if="isEventEndingToday(event, month, day)">{{ event.dateEnd | time }}</span>
+                        <span class="date" v-if="isEventEndingOnDate(event, day.date)">{{ event.dateEnd | time }}</span>
                     </template>
                     <span class="summary">{{ event.summary }}</span>
                 </div>
             </div>
-        </div>
-        <div class="day nextMonth" v-for="day in daysInNextMonth">
-            <span class="dayNumber">{{ day }}</span>
         </div>
         <div class="loadingIndicator" v-if="isLoading">
             <div class="background"></div>
