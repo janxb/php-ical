@@ -28,7 +28,7 @@ class EventToJsonConverter
 
             $json = new EventJson();
             $json->uid = $event->uid;
-            $json->summary = $event->summary;
+            $json->summary = html_entity_decode($event->summary);
             $json->description = str_replace("\n", '<br>', $event->description);
             $json->location = $event->location;
             /** @noinspection PhpUndefinedFieldInspection */
