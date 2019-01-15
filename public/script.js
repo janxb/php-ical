@@ -60,11 +60,11 @@ $('document').ready(function () {
 				return _.range([start = 1], dayCount + 1, [step = 1]);
 			},
 			daysInPreviousMonth: function () {
-				let previousMonth = moment(this.year + '-' + (this.month - 1) + '-01', 'YYYY-MM-DD');
 				let currentMonth = moment(this.year + '-' + this.month + '-01', 'YYYY-MM-DD');
-				let dayCount = currentMonth.format('E') - 1;
-				let startDay = previousMonth.daysInMonth() - dayCount;
-				return _.range([start = startDay + 1], startDay + dayCount + 1, [step = 1]);
+				let dayNumInCurrentMonth = currentMonth.format('E') - 1;
+				let previousMonth = currentMonth.subtract(1, 'month');
+				let startDay = previousMonth.daysInMonth() - dayNumInCurrentMonth;
+				return _.range([start = startDay + 1], startDay + dayNumInCurrentMonth + 1, [step = 1]);
 			},
 			daysInNextMonth: function () {
 				return _.range(
