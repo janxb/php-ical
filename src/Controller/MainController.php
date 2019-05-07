@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 
+use App\Components\ApiResponse;
 use App\Components\CalendarJson;
+use App\Components\EventAnonymizer;
 use App\Components\EventToJsonConverter;
 use DateInterval;
 use DateTime;
@@ -37,9 +39,13 @@ class MainController extends AbstractController
         ]);
     }
 
-    private function buildEventCacheUrl($calendarUrl, $year, $month)
+    private function buildEventCacheUrl($calendarUrl, $year, $month, $isAnonymous)
     {
-        return 'calendar.' . md5($calendarUrl) . '.' . $year . '.' . $month;
+        return 'calendar.'
+            . md5($calendarUrl)
+            . '.' . $year
+            . '.' . $month
+            . '.' . ($isAnonymous ? 'anonymous' : 'authenticated');
     }
 
     private function buildCalendarCacheUrl($calendarUrl)
@@ -69,19 +75,30 @@ class MainController extends AbstractController
 
         $calendarNames = array_map('trim', explode(',', $this->getParameter("calendar_names")));
 
+        $isPublicAvailabilityEnabled = $this->getParameter("calendar_public_availability") == "true";
+
         $requestPassword = $request->get('p');
 
         if ($isPasswordsEnabled) {
-            if (!in_array($requestPassword, $passwords))
-                return new JsonResponse(null, 403);
+            if (in_array($requestPassword, $passwords)) {
+                $isAnonymous = false;
+            } else {
+                if ($isPublicAvailabilityEnabled) {
+                    $isAnonymous = true;
+                } else {
+                    return new JsonResponse(null, 403);
+                }
+            }
         }
 
-        $result = [];
+        $result = new ApiResponse();
+        $result->isAuthenticated = !$isAnonymous;
+
         $startDate = DateTime::createFromFormat('Ymd', $year . $month . '01')->sub(new DateInterval('P1M'));
         $endDate = (clone $startDate)->add(new DateInterval('P3M'));
         foreach ($calendarUrls as $index => $calendarUrl) {
-            if ($cache->has($this->buildEventCacheUrl($calendarUrl, $year, $month))) {
-                $result[] = $cache->get($this->buildEventCacheUrl($calendarUrl, $year, $month));
+            if ($cache->has($this->buildEventCacheUrl($calendarUrl, $year, $month, $isAnonymous))) {
+                $result->calendars[] = $cache->get($this->buildEventCacheUrl($calendarUrl, $year, $month, $isAnonymous));
             } else {
                 if ($cache->has($this->buildCalendarCacheUrl($calendarUrl))) {
                     $ical = $cache->get($this->buildCalendarCacheUrl($calendarUrl));
@@ -92,12 +109,17 @@ class MainController extends AbstractController
                 $calendar = new CalendarJson();
                 $calendar->name = $calendarNames[$index];
                 $calendar->color = $calendarColors[$index];
-                $result[] = $calendar;
-                $calendar->events = (new EventToJsonConverter())->convert($ical, $ical->eventsFromRange(
-                    $startDate->format('Ymd'),
-                    $endDate->format('Ymd'))
-                );
-                $cache->set($this->buildEventCacheUrl($calendarUrl, $year, $month), $calendar, $cacheTimeout);
+                $result->calendars[] = $calendar;
+                $calendar->events =
+                    (new EventAnonymizer($isAnonymous))->anonymize(
+                        (new EventToJsonConverter())->convert($ical,
+                            $ical->eventsFromRange(
+                                $startDate->format('Ymd'),
+                                $endDate->format('Ymd')
+                            )
+                        )
+                    );
+                $cache->set($this->buildEventCacheUrl($calendarUrl, $year, $month, $isAnonymous), $calendar, $cacheTimeout);
             }
         }
         return new JsonResponse($result);

@@ -15,7 +15,8 @@ $('document').ready(function () {
 			pendingRequests: 0,
 			event: null,
 			password: Cookies.get('password'),
-			rawPassword: ""
+			rawPassword: "",
+			isAuthenticated: null
 		},
 		computed: {
 			selectedMonth: function () {
@@ -89,15 +90,17 @@ $('document').ready(function () {
 				this.ajaxRequest = $.ajax({
 					dataType: "json",
 					url: 'api/events/' + this.year + '/' + this.month + '?p=' + this.password,
-					success: function (calendars) {
-						calendars.forEach(function (calendar) {
+					success: function (data) {
+						data.calendars.forEach(function (calendar) {
 							calendar.events.forEach(function (event) {
 								event.calendarName = calendar.name;
 								event.dateStart = moment(event.dateStart);
 								event.dateEnd = moment(event.dateEnd);
 							});
 						});
-						app.calendars = calendars;
+						app.calendars = data.calendars;
+						app.isAuthenticated = data.isAuthenticated;
+
 						sleep(10).then(() => {
 							$('[data-toggle="tooltip"]').tooltip('dispose').tooltip({
 								placement: 'top',
@@ -108,7 +111,7 @@ $('document').ready(function () {
 					},
 					error: function (response) {
 						if (response.status === 403) {
-							$('#passwordModal').modal('show');
+							app.showPasswordDialog();
 						}
 					},
 					complete: function () {
@@ -117,6 +120,18 @@ $('document').ready(function () {
 						});
 					}
 				});
+			},
+			showPasswordDialog: function () {
+				this.rawPassword = "";
+				$('#passwordModal').modal('show');
+				$('#rawPassword').focus();
+			},
+			logout: function () {
+				Cookies.remove('password');
+				this.password = "";
+				this.rawPassword = "";
+				this.calendars = [];
+				this.loadEvents();
 			},
 			isEventOnDate: function (event, date) {
 				return moment().range(

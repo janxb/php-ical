@@ -5,3 +5,4 @@ parameters:
   calendar_colors: '%env(CALENDAR_COLORS)%'
   calendar_passwords: '%env(CALENDAR_PASSWORDS)%'
   calendar_cache_ttl: '%env(CALENDAR_CACHE_TTL)%'
+  calendar_public_availability: '%env(CALENDAR_PUBLIC_AVAILABILITY)%'
