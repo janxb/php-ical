@@ -33,25 +33,30 @@ $('document').ready(function () {
 				const self = this;
 				const today = new Date();
 				this.daysInPreviousMonth.forEach(function (day) {
+					const date = moment(self.year + '-' + self.month + '-01', 'YYYY-MM-DD').subtract(1, 'month').add(day - 1, 'days');
 					days.push({
-						date: moment(self.year + '-' + self.month + '-01', 'YYYY-MM-DD').subtract(1, 'month').add(day - 1, 'days'),
+						date: date,
 						isCurrentMonth: false,
-						isCurrentDay: false
+						isCurrentDay: false,
+						dayOfWeek: moment(date).add(1, 'days').weekday()
 					});
 				});
 				this.daysInMonth.forEach(function (day) {
-					let date = moment(self.year + '-' + self.month + '-' + day, 'YYYY-MM-DD');
+					const date = moment(self.year + '-' + self.month + '-' + day, 'YYYY-MM-DD');
 					days.push({
 						date: date,
 						isCurrentMonth: true,
-						isCurrentDay: date.isSame(today, "day")
+						isCurrentDay: date.isSame(today, "day"),
+						dayOfWeek: moment(date).add(1, 'days').weekday()
 					});
 				});
 				this.daysInNextMonth.forEach(function (day) {
+					const date = moment(self.year + '-' + self.month + '-01', 'YYYY-MM-DD').add(1, 'month').add(day - 1, 'days');
 					days.push({
-						date: moment(self.year + '-' + self.month + '-01', 'YYYY-MM-DD').add(1, 'month').add(day - 1, 'days'),
+						date: date,
 						isCurrentMonth: false,
-						isCurrentDay: false
+						isCurrentDay: false,
+						dayOfWeek: moment(date).add(1, 'days').weekday()
 					});
 				});
 				return days;
