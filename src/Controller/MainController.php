@@ -55,10 +55,12 @@ class MainController extends AbstractController
 
     /**
      * @param Request $request
+     * @param $year
+     * @param $month
+     * @param CacheInterface $cache
      * @return JsonResponse
-     * @Route("/api/events/{year}/{month}")
-     * @throws \Exception
      * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @Route("/api/events/{year}/{month}")
      */
     public function getEvents(Request $request, $year, $month, CacheInterface $cache)
     {
