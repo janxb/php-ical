@@ -36,5 +36,7 @@
         {% endif %}
 
         <script src="{{ asset('script.js') | file_hash }}"></script>
+
+		{{ source('tracking.html.twig', ignore_missing=true) }}
     </body>
 </html>

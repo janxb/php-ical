@@ -20,3 +20,5 @@
 *.iml
 *.ics
 .idea/
+
+templates/tracking.html.twig
