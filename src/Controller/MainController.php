@@ -91,6 +91,8 @@ class MainController extends AbstractController
                     return new JsonResponse(null, 403);
                 }
             }
+        } else {
+            $isAnonymous = false;
         }
 
         $result = new ApiResponse();
